@@ -35,6 +35,14 @@ const ExpenseList = ({ expenses, deleteExpense, setExpenseToEdit }) => {
                                 <td>{expense.description}</td>
                                 <td>₹{expense.amount.toFixed(2)}</td>
                                 <td><Badge bg="secondary" pill>{expense.category}</Badge></td>
+                                <td>
+    {expense.description} 
+    {expense.isRecurring && (
+        <Badge bg="info" className="ms-2" pill style={{ fontSize: '0.6rem' }}>
+            Recurring 🔄
+        </Badge>
+    )}
+</td>
                                 <td className="text-center">
                                     <Button variant="outline-light" size="sm" className="me-2" onClick={() => setExpenseToEdit(expense)}><FaEdit /></Button>
                                     <Button variant="outline-danger" size="sm" onClick={() => deleteExpense(expense._id)}><FaTrash /></Button>

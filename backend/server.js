@@ -9,6 +9,7 @@ dotenv.config({ path: './.env' });
 // Route files
 const expenses = require('./routes/expenses');
 const chatbot = require('./routes/chatbot');
+const budgets = require('./routes/Budgets');
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -28,6 +29,7 @@ app.use(cors());
 // Mount routers
 app.use('/api/expenses', expenses);
 app.use('/api/chatbot', chatbot);
+app.use('/api/budgets', budgets);
 
 const PORT = process.env.PORT || 5001;
 

@@ -7,6 +7,7 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState(''); // For the dropdown selection
     const [customCategory, setCustomCategory] = useState(''); // For the 'Other' text input
+    const [isRecurring, setIsRecurring] = useState(false);
 
     // Predefined categories for the dropdown menu
     const categories = ['Food', 'Shopping', 'Transport', 'Utilities', 'Entertainment', 'Other'];
@@ -16,11 +17,13 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
         if (expenseToEdit) {
             setDescription(expenseToEdit.description);
             setAmount(expenseToEdit.amount);
+            setIsRecurring(expenseToEdit.isRecurring || false);
 
             // Check if the expense's category is a standard one or custom
             if (categories.includes(expenseToEdit.category)) {
                 setCategory(expenseToEdit.category);
                 setCustomCategory(''); // Clear custom field
+                
             } else {
                 setCategory('Other');
                 setCustomCategory(expenseToEdit.category);
@@ -31,6 +34,7 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
             setAmount('');
             setCategory('');
             setCustomCategory('');
+            setIsRecurring(false);
         }
     }, [expenseToEdit]);
 
@@ -58,6 +62,7 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
         setCategory('');
         setCustomCategory('');
         setExpenseToEdit(null);
+        setIsRecurring(false);
     };
 
     return (
@@ -79,6 +84,16 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
                             />
                         </Form.Group>
                     </Col>
+
+                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+    <Form.Check 
+        type="checkbox" 
+        label="Recurring Expense (Subscription/Bill)" 
+        checked={isRecurring}
+        onChange={(e) => setIsRecurring(e.target.checked)}
+        style={{ color: 'var(--text-color)' }}
+    />
+</Form.Group>
                     {/* Amount field */}
                     <Col md={2}>
                         <Form.Group>
@@ -120,6 +135,7 @@ const ExpenseForm = ({ addExpense, updateExpense, expenseToEdit, setExpenseToEdi
                                 />
                             </Form.Group>
                         </Col>
+                            
                     )}
                 </Row>
                 <div className="mt-4">

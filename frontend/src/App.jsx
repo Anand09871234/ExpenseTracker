@@ -3,22 +3,26 @@ import axios from 'axios';
 import { Row, Col } from 'react-bootstrap';
 import ExpenseList from './components/ExpenseList.jsx';
 import ExpenseForm from './components/ExpenseForm.jsx';
-import Chatbot from './components/ChatBot.jsx';
+import Chatbot from './components/Chatbot.jsx';
 import ExpenseChart from './components/ExpenseChart.jsx';
-import ExpenseSummary from './components/ExpenseSummary.jsx'; // Import the new summary component
+import ExpenseSummary from './components/ExpenseSummary.jsx';
+import BudgetProgress from './components/BudgetProgress.jsx'; // Import the new Budget component
 import './App.css';
 
 const API_URL = 'http://localhost:5001/api/expenses';
+const BUDGET_API_URL = 'http://localhost:5001/api/budgets';
 
 function App() {
   // --- STATE MANAGEMENT ---
   const [expenses, setExpenses] = useState([]);
+  const [budgets, setBudgets] = useState([]); // New State for budgets
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [chatbotMessages, setChatbotMessages] = useState([{ from: 'bot', text: 'Welcome! Add an expense on the left, and I will give you a personalized savings tip here.' }]);
 
   // --- DATA FETCHING ---
   useEffect(() => {
     getExpenses();
+    getBudgets(); // Fetch budgets when app loads
   }, []);
 
   const getExpenses = async () => {
@@ -27,6 +31,26 @@ function App() {
       setExpenses(res.data.data);
     } catch (error) {
       console.error("Error fetching expenses", error);
+    }
+  };
+
+  const getBudgets = async () => {
+    try {
+      const res = await axios.get(BUDGET_API_URL);
+      setBudgets(res.data.data);
+    } catch (error) {
+      console.error("Error fetching budgets", error);
+    }
+  };
+
+  const setBudgetLimit = async (category, limit) => {
+    try {
+      const res = await axios.post(BUDGET_API_URL, { category, limit });
+      // Update local state: remove old budget for this category and add new one
+      const updatedBudgets = budgets.filter(b => b.category !== category);
+      setBudgets([...updatedBudgets, res.data.data]);
+    } catch (error) {
+      console.error("Error setting budget", error);
     }
   };
 
@@ -84,9 +108,10 @@ function App() {
       <main className="main-content">
         <h1 className="mb-4" style={{ color: 'var(--headline-color)', fontWeight: '600' }}>Expense Dashboard</h1>
         
-        {/* The new total expenses summary card */}
+        {/* Total Expenses Summary Card */}
         <ExpenseSummary total={totalExpenses} />
 
+        {/* Expense Form */}
         <ExpenseForm 
           addExpense={addExpense} 
           expenseToEdit={expenseToEdit} 
@@ -96,6 +121,7 @@ function App() {
 
         <Row className="g-4">
             <Col md={7}>
+                 {/* Transaction History List */}
                  <ExpenseList 
                     expenses={expenses} 
                     deleteExpense={deleteExpense} 
@@ -103,7 +129,17 @@ function App() {
                  />
             </Col>
             <Col md={5}>
-                <ExpenseChart expenses={expenses} />
+                {/* Stack Chart and Budget Progress Vertically */}
+                <div className="d-flex flex-column gap-4">
+                    <ExpenseChart expenses={expenses} />
+                    
+                    {/* New Budget Progress Component */}
+                    <BudgetProgress 
+                        expenses={expenses} 
+                        budgets={budgets} 
+                        setBudget={setBudgetLimit} 
+                    />
+                </div>
             </Col>
         </Row>
       </main>

@@ -64,6 +64,8 @@ body {
 .form-label {
   color: var(--headline-color);
   font-weight: 600;
+  margin-bottom: 0.5rem;      /* Adds space between Label and Input */
+  display: inline-block;      /* Ensures margin works */
 }
 
 .form-control, .form-select {
@@ -72,13 +74,15 @@ body {
   color: var(--headline-color);
   border-radius: 8px;
   padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;     /* Adds space below every input field */
+  width: 100%;                /* Ensures inputs take full width */
+  box-sizing: border-box;     /* Prevents padding from breaking layout */
 }
 
-.form-control:focus, .form-select:focus {
-  background-color: var(--input-background);
-  color: var(--headline-color);
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.3);
+/* Add a specific margin to the button to separate it from the last input */
+.btn-gradient {
+  margin-top: 0.5rem;
+  width: 100%;                /* Optional: Makes button full width for better mobile look */
 }
 
 .btn-gradient {
@@ -98,20 +102,58 @@ body {
 
 /* --- Expense List Table --- */
 .table {
+  width: 100%;
+  border-collapse: separate;  /* Essential for border-radius on rows */
+  border-spacing: 0 0.8rem;   /* Adds distinct gap between rows */
   color: var(--text-color);
+  margin-top: 0.5rem;
 }
+
+/* Header Styling */
 .table thead th {
-  color: var(--headline-color);
-  border-bottom: 2px solid var(--primary-color);
+  color: var(--text-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  border-bottom: none;        /* Remove default border */
+  padding: 0 1rem 0.5rem 1rem;
+  opacity: 0.8;
 }
+
+/* Row Styling */
 .table tbody tr {
-  border-color: #333;
+  background-color: #1e1e22;  /* Slightly darker/lighter than card to stand out */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.table-hover tbody tr:hover {
+
+/* Hover Effect */
+.table tbody tr:hover {
+  transform: scale(1.01);     /* Subtle pop effect */
   background-color: #2a2c30;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  cursor: default;
+}
+
+/* Cell Styling */
+.table tbody td {
+  padding: 1.2rem 1rem;       /* More padding for a cleaner look */
+  border: none;               /* Remove borders between cells */
+  vertical-align: middle;
   color: var(--headline-color);
 }
 
+/* Rounded Corners for Rows */
+.table tbody td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  font-weight: 600;           /* Emphasize the Description */
+}
+
+.table tbody td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 /* --- THE NEW CHATBOT INTERFACE --- */
 .chat-container {
   display: flex;

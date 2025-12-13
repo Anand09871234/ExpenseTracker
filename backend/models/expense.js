@@ -15,6 +15,7 @@ const ExpenseSchema = new mongoose.Schema({
     trim: true,
     required: [true, 'Please add a category'],
   },
+  isRecurring: { type: Boolean, default: false },
   createdAt: {
     type: Date,
     default: Date.now,
