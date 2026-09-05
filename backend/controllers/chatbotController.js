@@ -18,15 +18,24 @@ exports.getSavingsTip = async (req, res, next) => {
     }
 
     const prompt = `
-        You are a sharp, friendly, and encouraging financial advisor from India.
-        A user from Mysuru, Karnataka just logged a new expense in their app. Here are the details:
-        - Category: ${category}
-        - Amount: ₹${amount}
-        - Description: "${description}"
+        You are an AI financial assistant for an expense tracking application.
 
-        Based on this specific expense, provide a single, short (2-3 sentences), insightful, and encouraging savings tip or observation. 
-        Speak directly to the user in a helpful tone. Avoid generic advice if possible and relate it to the expense.
-    `;
+        Analyze the expense below and provide ONE concise, practical savings tip.
+
+        Expense:
+        - Amount: ₹${amount}
+        - Category: ${category}
+        - Description: ${description || "Not provided"}
+
+        Rules:
+        1. Treat the amount exactly as provided. Never add, remove, or change digits.
+        2. Never invent facts about the user's spending.
+        3. If the amount appears unusually large, explicitly suggest verifying the entry instead of assuming what caused it.
+        4. Do not make jokes or sarcastic comments about the expense.
+        5. Do not assume the user's location, lifestyle, income, or circumstances.
+        6. Keep the response between 2 and 4 sentences.
+        7. Give practical financial advice relevant to the category.
+        `;
 
     try {
         // 2. Get the model *inside* the function that will use it.
