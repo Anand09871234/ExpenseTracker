@@ -30,7 +30,7 @@ exports.getSavingsTip = async (req, res, next) => {
 
     try {
         // 2. Get the model *inside* the function that will use it.
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
         
         const result = await model.generateContent(prompt);
         const response = await result.response;
